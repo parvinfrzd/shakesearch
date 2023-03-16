@@ -8,6 +8,15 @@ There are 3 type strucs: Searcher, Results, and DotIndices.
 	3. DotIndices: an object containig the indices of period (.) to period (.) before
 							and after the found query in the sentence.
 
+List of added functionalities and improvements:
+
+	1.	Remove case-sensitivity
+	2.	Adding occurance count and error message in results objects to handle user
+			messages and sorting options on client side.
+	3.	Replace -250 +250 characters the finding the first period (.) before
+			and after query.
+	4.	Adding type structs and functions for scalability and code conventions.
+
 Usage:
 
 Run ```go run main.go``` and open localhost:3001 in your browser to run development mode.
@@ -124,10 +133,11 @@ func (s *Searcher) Search(query string) []Result {
 	idxs := s.SuffixArray.Lookup([]byte(query), -1)
 	results := []Result{}
 	for _, idx := range idxs {
-		text := s.CompleteWorks[idx-250 : idx+250]
-		textToLower := strings.ToLower(text)
+		//Finding senstences containing the query.
+		text := s.CompleteWorks[s.getDotIdx(idx)[0].LeftIdx:s.getDotIdx(idx)[0].RightIdx]
+		textLower := strings.ToLower(text)
 		// Add count value to handle sorting results on client side.
-		count := strings.Count(textToLower, query)
+		count := strings.Count(textLower, query)
 
 		results = append(results, Result{Text: text, OccurrenceCount: count})
 	}
