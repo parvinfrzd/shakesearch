@@ -59,6 +59,13 @@ type Searcher struct {
 	SuffixArray   *suffixarray.Index
 }
 
+// Object result to send to front end (client side)
+type Result struct {
+	Text            string `json:"text"`
+	OccurrenceCount int    `json:"occurrenceCount"`
+	ErrorCode       int    `json:"errorCode"`
+}
+
 // Method of a Searcher type that returns a http request function.
 func handleSearch(searcher Searcher) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
