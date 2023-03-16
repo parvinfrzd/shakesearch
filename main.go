@@ -128,9 +128,10 @@ func (s *Searcher) Search(query string) []Result {
 	return results
 }
 
-func onlyContainsSpecialChars(txt string) bool {
-	specialCharacterRegex := regexp.MustCompile("[" + strings.Join([]string{"]", "^", "\\\\", "[", ".", "(", ")", "-", ",", ";"}, "") + "]+")
+// Init special character regex to prevent generating each time in the local function.
+var specialCharacterRegex = regexp.MustCompile("[" + strings.Join([]string{"]", "^", "\\\\", "[", ".", "(", ")", "-", ",", ";"}, "") + "]+")
 
+func onlyContainsSpecialChars(txt string) bool {
 	cleaned := specialCharacterRegex.ReplaceAllString(strings.TrimSpace(txt), "")
 	return len(cleaned) == 0
 }
