@@ -28,3 +28,16 @@ We will be primarily evaluating based on how well the search works for users. A 
 1. Fork this repository and send us a link to your fork after pushing your changes.
 2. Render (render.com) hosting, the application deploys cleanly from a public url.
 3. In your submission, share with us what changes you made and how you would prioritize changes if you had more time.
+
+
+## To do: 
+1.  Remove case-sensitivity 
+2.  Add occurance count
+3.  Replace -250 to +250 charachters with period to period 
+4.  Add type structs and functions for scalability 
+5.  Error handling message front and back end (including error codes)
+6.  Sorting results 
+7.  Highlight the found query in UI 
+8.  Reactjs components for blocks 
+9.  Test scripts 
+10. Annotation and readme 
