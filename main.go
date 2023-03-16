@@ -102,11 +102,11 @@ func (s *Searcher) Load(filename string) error {
 }
 
 // Searcher function of Searcher type that returns results.
-func (s *Searcher) Search(query string) []string {
+func (s *Searcher) Search(query string) []Result {
 	idxs := s.SuffixArray.Lookup([]byte(query), -1)
-	results := []string{}
+	results := []Result{}
 	for _, idx := range idxs {
-		results = append(results, s.CompleteWorks[idx-250:idx+250])
+		results = append(results, Result{Text: s.CompleteWorks[idx-250 : idx+250]})
 	}
 	return results
 }
