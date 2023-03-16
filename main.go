@@ -68,6 +68,12 @@ type Result struct {
 	ErrorCode       int    `json:"errorCode"`
 }
 
+// Object for private use only. returns the left and right indices or period (.)
+type DotIndices struct {
+	LeftIdx  int
+	RightIdx int
+}
+
 // Method of a Searcher type that returns a http request function.
 func handleSearch(searcher Searcher) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -134,4 +140,24 @@ var specialCharacterRegex = regexp.MustCompile("[" + strings.Join([]string{"]", 
 func onlyContainsSpecialChars(txt string) bool {
 	cleaned := specialCharacterRegex.ReplaceAllString(strings.TrimSpace(txt), "")
 	return len(cleaned) == 0
+}
+
+// Logic that returns the dot indices for each query found.
+func (s *Searcher) getDotIdx(idx int) []DotIndices {
+	rightIdx := strings.Index(s.CompleteWorks[idx:], ".")
+	leftIdx := strings.LastIndex(s.CompleteWorks[:idx], ".")
+
+	if rightIdx == -1 {
+		rightIdx = len(s.CompleteWorks) - 1
+	} else {
+		rightIdx = idx + rightIdx + 1
+	}
+
+	if leftIdx == -1 {
+		leftIdx = 0
+	} else {
+		leftIdx += 1
+	}
+
+	return []DotIndices{{LeftIdx: leftIdx, RightIdx: rightIdx}}
 }
