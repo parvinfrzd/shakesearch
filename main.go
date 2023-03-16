@@ -24,6 +24,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -117,4 +118,11 @@ func (s *Searcher) Search(query string) []Result {
 		results = append(results, Result{Text: text, OccurrenceCount: count})
 	}
 	return results
+}
+
+func onlyContainsSpecialChars(txt string) bool {
+	specialCharacterRegex := regexp.MustCompile("[" + strings.Join([]string{"]", "^", "\\\\", "[", ".", "(", ")", "-", ",", ";"}, "") + "]+")
+
+	cleaned := specialCharacterRegex.ReplaceAllString(strings.TrimSpace(txt), "")
+	return len(cleaned) == 0
 }
