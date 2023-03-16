@@ -104,7 +104,8 @@ func (s *Searcher) Load(filename string) error {
 
 // Searcher function of Searcher type that returns results.
 func (s *Searcher) Search(query string) []Result {
-	query = strings.ToLower(query)
+	// Remove space for easing search functionlity (since we are searching in bytes)
+	query = strings.ToLower(strings.TrimSpace(query))
 	idxs := s.SuffixArray.Lookup([]byte(query), -1)
 	results := []Result{}
 	for _, idx := range idxs {
