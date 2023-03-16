@@ -105,6 +105,14 @@ func (s *Searcher) Load(filename string) error {
 
 // Searcher function of Searcher type that returns results.
 func (s *Searcher) Search(query string) []Result {
+	// Take care of query only containig special characters to send proper
+	// user message on client side.
+	if onlyContainsSpecialChars(query) {
+		//containing costume error code to handle messaging and UI on client side.
+		return []Result{
+			{Text: "Cannot process query that contains only special characters", ErrorCode: 101},
+		}
+	}
 	// Remove space for easing search functionlity (since we are searching in bytes)
 	query = strings.ToLower(strings.TrimSpace(query))
 	idxs := s.SuffixArray.Lookup([]byte(query), -1)
