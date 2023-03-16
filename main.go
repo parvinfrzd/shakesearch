@@ -24,6 +24,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 // This functions runs the server, load the flat database(txt file), and handle http
@@ -103,10 +104,16 @@ func (s *Searcher) Load(filename string) error {
 
 // Searcher function of Searcher type that returns results.
 func (s *Searcher) Search(query string) []Result {
+	query = strings.ToLower(query)
 	idxs := s.SuffixArray.Lookup([]byte(query), -1)
 	results := []Result{}
 	for _, idx := range idxs {
-		results = append(results, Result{Text: s.CompleteWorks[idx-250 : idx+250]})
+		text := s.CompleteWorks[idx-250 : idx+250]
+		textToLower := strings.ToLower(text)
+		// Add count value to handle sorting results on client side.
+		count := strings.Count(textToLower, query)
+
+		results = append(results, Result{Text: text, OccurrenceCount: count})
 	}
 	return results
 }
