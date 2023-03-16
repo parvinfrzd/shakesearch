@@ -89,7 +89,8 @@ func (s *Searcher) Load(filename string) error {
 		return fmt.Errorf("Load: %w", err)
 	}
 	s.CompleteWorks = string(dat)
-	s.SuffixArray = suffixarray.New(dat)
+	//converting the data into lowercase to handle case-sensetivity.
+	s.SuffixArray = suffixarray.New(bytes.ToLower(dat))
 	return nil
 }
 
