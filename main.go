@@ -1,3 +1,18 @@
+/*
+Main package takes care of the search query in the application.
+There are 3 type strucs: Searcher, Results, and DotIndices.
+
+	1. Searcher: struct consist pf completeworks and suffixArray package that takes care of query
+						lookup in bytes and string formats.
+	2. Results: an object sent to frontend containig the results of the seach function.
+	3. DotIndices: an object containig the indices of period (.) to period (.) before
+							and after the found query in the sentence.
+
+Usage:
+
+Run ```go run main.go``` and open localhost:3001 in your browser to run development mode.
+*/
+
 package main
 
 import (
@@ -11,6 +26,8 @@ import (
 	"os"
 )
 
+// This functions runs the server, load the flat database(txt file), and handle http
+// request for seach query.
 func main() {
 	searcher := Searcher{}
 	err := searcher.Load("completeworks.txt")
@@ -35,11 +52,14 @@ func main() {
 	}
 }
 
+// Struct including completeworks string and suffixArray package for
+// searching functionality.
 type Searcher struct {
 	CompleteWorks string
 	SuffixArray   *suffixarray.Index
 }
 
+// Method of a Searcher type that returns a http request function.
 func handleSearch(searcher Searcher) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		query, ok := r.URL.Query()["q"]
@@ -62,6 +82,7 @@ func handleSearch(searcher Searcher) func(w http.ResponseWriter, r *http.Request
 	}
 }
 
+// Loader function of the Searcher type that loads data in strings and bytes for search.
 func (s *Searcher) Load(filename string) error {
 	dat, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -72,6 +93,7 @@ func (s *Searcher) Load(filename string) error {
 	return nil
 }
 
+// Searcher function of Searcher type that returns results.
 func (s *Searcher) Search(query string) []string {
 	idxs := s.SuffixArray.Lookup([]byte(query), -1)
 	results := []string{}
