@@ -29,9 +29,6 @@ function SearchForm({getData}) {
     .then((data) => {
       setParentData({isLoaded: true, items: data, error: null}) 
       console.log(parentData);
-    }).then (() => {
-      getData(parentData);
-
     })
     .catch((error) => {
       setParentData({isLoaded: true, items: null, error: error}) 
@@ -40,8 +37,9 @@ function SearchForm({getData}) {
   };
 
   useEffect(()=> {
-    console.log(parentData);
-    getData(parentData);
+    if(parentData) {
+      getData(parentData);
+    }
   },[parentData])
 
 

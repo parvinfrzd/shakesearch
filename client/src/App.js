@@ -15,38 +15,44 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false); 
   const [items, setItems] = useState([]);
 
+  const [data, setData] = useState({});
+
   const [query, setQuery] = useState('');
-  const endpoint = 'http://localhost:3001/search'
+
   const getData = (data) => {
-    setError(data.error); 
-    setIsLoaded(data.isLoaded); 
-    setItems(data.items);
+    setData(data);
+    console.log("passed to partent", data);
   }
+
+  useEffect(()=> {
+    console.log(data);
+
+  },[data])
+
 
   return (
     <div className="App content-area">
         <h1>Welcome to Shakespear Search</h1>
         <SearchForm getData={getData} />
         <div className="content-area">
-          {error && <h1>Messages: {error.message}</h1>}
-          {!isLoaded && <h3>Is loading data... </h3>}
-          {isLoaded && items.length === 0 && 
+          {data.error && <h1>Messages: {data.error.message}</h1>}
+          {!data.isLoaded && <h3>Is loading data... </h3>}
+          {data.isLoaded && data.items.length === 0 && 
             <h3>
               No results found. Please try again.
             </h3>}
-            {items.length === 1 && items[0].errorCode === 101 && <h3>{items[0].text}</h3>}
-            {items.length > 0  && items[0].errorCode === 0 &&
+            {data.items.length === 1 && data.items[0].errorCode === 101 && <h3>{data.items[0].text}</h3>}
+            {data.items.length > 0  && data.items[0].errorCode === 0 &&
               <div className="output-area">
-                <h3>Total number of results found {items.length}</h3>
+                <h3>Total number of results found {data.items.length}</h3>
                 <div className="results">
-                    {items.map((item) => 
+                    {data.items.map((item) => 
                       <Card >
                         <Card.Body>
                           <Card.Title>number of {query} found: {item.occurrenceCount}</Card.Title>
                           <Card.Text>
                           {item.text}
                           </Card.Text>
-                          <Button variant="primary">Share this queute</Button>
                         </Card.Body>
                       </Card>
                     )}
