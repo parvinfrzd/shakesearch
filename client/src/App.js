@@ -36,40 +36,45 @@ function App() {
   };
 
   return (
-    <div className="App">
-        <div className="form-wrapper">
+    <div className="App content-area">
         <h1>Welcome to Shakespear Search</h1>
-        <form id="form" className="mb-3" onSubmit={handleSubmit}>
-            <input type="text" id="q" name="q" className="form-control" 
-              placeholder="Jot something here!"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              />
-            <button type="submit" 
-              className="btn btn-primary"
-              >Search</button>
-        </form>
-        </div>
-
+        <Form onSubmit={handleSubmit} >
+        <Form.Group className="mb-3" controlId="formBasic">
+          <Form.Control type="text" id="q" name="q" placeholder="Jot something here"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)} />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Search
+          </Button>
+        </Form>
         <div className="content-area">
-        {error && <h1>Messages: {error.message}</h1>}
-        {!isLoaded && <h3>Is loading data... </h3>}
-        { items.length > 0  && <div>
-          <h3>Total number of results found {items.length}</h3>
-              {items.map((item) => 
-                <Card >
-                  <Card.Body>
-                    <Card.Title>number of {query} found: {item.occurrenceCount}</Card.Title>
-                    <Card.Text>
-                     {item.text}
-                    </Card.Text>
-                    <Button variant="primary">Share this queute</Button>
-                  </Card.Body>
-                </Card>
-              )}
-        </div>}
-        </div> 
-    </div>
+            {error && <h1>Messages: {error.message}</h1>}
+            {!isLoaded && <h3>Is loading data... </h3>}
+            {isLoaded && items.length === 0 && 
+              <h3>
+                No results found. Please try again.
+              </h3>}
+              {items.length === 1 && items[0].errorCode === 101 && <h3>{items[0].text}</h3>}
+              {items.length > 0  && items[0].errorCode === 0 &&
+                <div className="output-area">
+                  <h3>Total number of results found {items.length}</h3>
+                  <div className="results">
+                      {items.map((item) => 
+                        <Card >
+                          <Card.Body>
+                            <Card.Title>number of {query} found: {item.occurrenceCount}</Card.Title>
+                            <Card.Text>
+                            {item.text}
+                            </Card.Text>
+                            <Button variant="primary">Share this queute</Button>
+                          </Card.Body>
+                        </Card>
+                      )}
+                  </div>
+                </div>}
+          </div>
+        </div>
   );
 }
 
