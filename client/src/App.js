@@ -14,7 +14,6 @@ function App() {
 
   var handleSubmit = (e) => {
     e.preventDefault();
-    // console.log("Hello")
     fetch(`${endpoint}?q=${query}`, {
       mode:'cors',
       method: 'get',
@@ -27,10 +26,8 @@ function App() {
     })
     .then((data) => {
       setIsLoaded(true); 
-      console.log(data);
       setItems(data);})
     .catch((error) => {
-      console.log(error); 
       setError(error);
     })
   };

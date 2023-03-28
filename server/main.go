@@ -83,6 +83,7 @@ type DotIndices struct {
 	RightIdx int
 }
 
+// enable all cors, not suitable for production.
 func enableCors(w *http.ResponseWriter) {
 	header := (*w).Header()
 	header.Add("Access-Control-Allow-Origin", "*")
@@ -93,8 +94,6 @@ func enableCors(w *http.ResponseWriter) {
 // Method of a Searcher type that returns a http request function.
 func handleSearch(searcher Searcher) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// w.Header().Set("Access-Control-Allow-Origin", "*")
-		// w.Header().Set("Access-Control-Allow-Headers", "*")
 		enableCors(&w)
 		query, ok := r.URL.Query()["q"]
 		if !ok || len(query[0]) < 1 {
@@ -111,7 +110,6 @@ func handleSearch(searcher Searcher) func(w http.ResponseWriter, r *http.Request
 			w.Write([]byte("encoding failure"))
 			return
 		}
-		// w.Header().Set("Content-Type", "application/json")
 		w.Write(buf.Bytes())
 	}
 }
