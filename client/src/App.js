@@ -1,6 +1,7 @@
 import './App.css';
 import { useState } from 'react'; 
-
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 
 function App() {
   const [error, setError] = useState(null); // error message 
@@ -48,6 +49,25 @@ function App() {
               className="btn btn-primary"
               >Search</button>
         </form>
+        </div>
+
+        <div className="content-area">
+        {error && <h1>Messages: {error.message}</h1>}
+        {!isLoaded && <h3>Is loading data... </h3>}
+        { items.length > 0  && <div>
+          <h3>Total number of results found {items.length}</h3>
+              {items.map((item) => 
+                <Card >
+                  <Card.Body>
+                    <Card.Title>number of {query} found: {item.occurrenceCount}</Card.Title>
+                    <Card.Text>
+                     {item.text}
+                    </Card.Text>
+                    <Button variant="primary">Share this queute</Button>
+                  </Card.Body>
+                </Card>
+              )}
+        </div>}
         </div> 
     </div>
   );
