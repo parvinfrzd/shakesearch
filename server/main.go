@@ -140,6 +140,13 @@ func (s *Searcher) Search(query string) []Result {
 	query = strings.ToLower(strings.TrimSpace(query))
 	idxs := s.SuffixArray.Lookup([]byte(query), -1)
 	results := []Result{}
+
+	if len(query) < 3 {
+		return []Result{
+			{Text: "Cannot process query less than 3 characters", ErrorCode: 102},
+		}
+	}
+
 	for _, idx := range idxs {
 		//Finding senstences containing the query.
 		text := s.CompleteWorks[s.getDotIdx(idx)[0].LeftIdx:s.getDotIdx(idx)[0].RightIdx]
