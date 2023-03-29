@@ -4,18 +4,17 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 function SearchForm({getData}) {
-  // const [error, setError] = useState(null); // error message 
-  // const [isLoaded, setIsLoaded] = useState(false); //check if data is loaded fro dynamic rendering
-  // const [items, setItems] = useState([]); // data 
-
   const [query, setQuery] = useState('');
-
   const [parentData, setParentData] = useState({});
 
   const endpoint = 'http://localhost:3001/search'
 
   var handleSubmit = (e) => {
     e.preventDefault();
+    if(query.length < 3) {
+      setParentData({isLoaded: true, items: null, error: {message: "Cannot search query less than 3 characters"}, query: query});
+      return;
+    } 
     fetch(`${endpoint}?q=${query}`, {
       mode:'cors',
       method: 'get',
@@ -27,11 +26,11 @@ function SearchForm({getData}) {
       return res.json()
     })
     .then((data) => {
-      setParentData({isLoaded: true, items: data, error: null}) 
+      setParentData({isLoaded: true, items: data, error: null, query: query}) 
       console.log(parentData);
     })
     .catch((error) => {
-      setParentData({isLoaded: true, items: null, error: error}) 
+      setParentData({isLoaded: true, items: null, error: error, query: query}) 
       getData(parentData);
     })
   };
@@ -44,7 +43,7 @@ function SearchForm({getData}) {
 
 
   return (
-    <Form onSubmit={handleSubmit} >
+    <Form onSubmit={handleSubmit} className="form">
       <Form.Group className="mb-3">
         <Form.Control type="text" id="q" name="q" placeholder="Jot something here"
                       value={query}
