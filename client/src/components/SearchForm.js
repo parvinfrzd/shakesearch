@@ -7,7 +7,7 @@ function SearchForm({getData}) {
   const [query, setQuery] = useState('');
   const [parentData, setParentData] = useState({});
 
-  const endpoint = 'http://localhost:3001/search'
+  const endpoint = 'http://localhost:3001/search';
 
   var handleSubmit = (e) => {
     e.preventDefault();
@@ -43,7 +43,7 @@ function SearchForm({getData}) {
 
 
   return (
-    <Form onSubmit={handleSubmit} className="form">
+    <Form onSubmit={handleSubmit} className="form content-area">
       <Form.Group className="mb-3">
         <Form.Control type="text" id="q" name="q" placeholder="Jot something here"
                       value={query}
